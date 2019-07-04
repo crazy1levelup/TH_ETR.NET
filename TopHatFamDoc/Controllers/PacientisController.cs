@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using TopHatFamDoc.Models;
 
@@ -22,9 +24,21 @@ namespace TopHatFamDoc.Controllers
 
         // GET: api/Pacientis
         [HttpGet]
-        public IEnumerable<Pacienti> GetPacienti()
+        public IEnumerable<Pacienti> GetPacienti([FromQuery] string search)
         {
-            return _context.Pacienti;
+
+
+            var pacienti = from n in _context.Pacienti
+                           select n;
+            if (!String.IsNullOrEmpty(search))
+            {
+                pacienti = pacienti.Where(p => p.Nume.Contains(search) || p.Prenume.Contains(search));
+                
+                                    
+            }
+            return pacienti;
+
+
         }
 
         // GET: api/Pacientis/5
@@ -45,6 +59,8 @@ namespace TopHatFamDoc.Controllers
 
             return Ok(pacienti);
         }
+
+     
 
         // PUT: api/Pacientis/5
         [HttpPut("{id}")]
@@ -89,7 +105,7 @@ namespace TopHatFamDoc.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            pacienti.DataInregistrare = DateTime.Today;
             _context.Pacienti.Add(pacienti);
             await _context.SaveChangesAsync();
 
@@ -121,5 +137,6 @@ namespace TopHatFamDoc.Controllers
         {
             return _context.Pacienti.Any(e => e.id == id);
         }
-    }
+
+}
 }
