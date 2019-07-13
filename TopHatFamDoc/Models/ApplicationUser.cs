@@ -24,7 +24,6 @@ namespace TopHatFamDoc.Models
         [Column(TypeName = "nvarchar(1000)")]
         public string Notes { get; set; }
 
-        public virtual Pacienti Pacienti { get; set; }
-
+       
     }
 }

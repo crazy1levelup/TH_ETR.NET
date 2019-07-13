@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TopHatFamDoc.Models;
 
 namespace TopHatFamDoc.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    partial class AuthenticationContextModelSnapshot : ModelSnapshot
+    [Migration("20190713105255_removed pacienti from user")]
+    partial class removedpacientifromuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,8 +211,6 @@ namespace TopHatFamDoc.Migrations
                     b.Property<string>("Prenume")
                         .IsRequired()
                         .HasColumnType("nvarchar(150)");
-
-                    b.Property<string>("UserID");
 
                     b.Property<DateTime>("ZiuaNastere")
                         .HasColumnType("date");

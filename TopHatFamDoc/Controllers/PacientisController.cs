@@ -27,9 +27,10 @@ namespace TopHatFamDoc.Controllers
         public IEnumerable<Pacienti> GetPacienti([FromQuery] string search)
         {
 
-
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
             var pacienti = from n in _context.Pacienti
                            select n;
+            pacienti = pacienti.Where(p => p.UserID.Equals(userId));
             if (!String.IsNullOrEmpty(search))
             {
                 pacienti = pacienti.Where(p => p.Nume.Contains(search) || p.Prenume.Contains(search));
@@ -101,10 +102,12 @@ namespace TopHatFamDoc.Controllers
         [HttpPost]
         public async Task<IActionResult> PostPacienti([FromBody] Pacienti pacienti)
         {
+            string userId = User.Claims.First(c => c.Type == "UserID").Value;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            pacienti.UserID = userId;
             pacienti.DataInregistrare = DateTime.Today;
             _context.Pacienti.Add(pacienti);
             await _context.SaveChangesAsync();
